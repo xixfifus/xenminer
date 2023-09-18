@@ -7,11 +7,14 @@ from random import choice, randrange
 import string
 import threading
 import re
-
+proxies = {
+    'http': 'http://127.0.0.1:10809',
+    'https': 'http://127.0.0.1:10809'
+}
 difficulty = 1
 memory_cost = 8 
 cores = 1
-account = "0x0A6969ffF003B760c97005e03ff5a9741126167A"
+account = "0x012347eEF37859Cd1863dE779541Ff6f2C1E2Fee"
 
 class Block:
     def __init__(self, index, prev_hash, data, valid_hash, random_data, attempts):
@@ -56,7 +59,7 @@ def update_memory_cost_periodically():
 # Function to get difficulty level from the server
 def fetch_difficulty_from_server():
     try:
-        response = requests.get('http://xenminer.mooo.com/difficulty')
+        response = requests.get('http://xenminer.mooo.com/difficulty',proxies=proxies)
         response_data = response.json()
         return str(response_data['difficulty'])
     except Exception as e:
@@ -133,7 +136,7 @@ def mine_block(target_substr, prev_hash):
 
     while retries <= max_retries:
         # Make the POST request
-        response = requests.post('http://xenminer.mooo.com/verify', json=payload)
+        response = requests.post('http://xenminer.mooo.com/verify', json=payload,proxies=proxies)
 
         # Print the HTTP status code
         print("HTTP Status Code:", response.status_code)
